@@ -8,10 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.cyxtera.detectid.core.dto.ClientRequestDto;
 import com.cyxtera.detectid.core.dto.ClientResponseDto;
 import com.cyxtera.detectid.core.facade.DetectIdCoreFacade;
@@ -27,7 +30,8 @@ import io.swagger.annotations.*;
  *
  */
 
-@Controller
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@RestController
 @RequestMapping("/v1")
 public class DetectIdController {
 
@@ -47,7 +51,7 @@ public class DetectIdController {
 	 * @throws JsonProcessingException
 	 */
 	@ApiOperation(value = "Add a client")
-	@RequestMapping(value = "/addClient", method = RequestMethod.POST, produces =  MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/add", method = RequestMethod.POST, produces =  MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addClient(@RequestBody ClientRequestDto clientDto) throws JsonProcessingException {
 		logger.info("Entry /addClient from controller");
 		ClientResponseDto clientResponseDto = new ClientResponseDto();
@@ -99,9 +103,9 @@ public class DetectIdController {
 	 * @return
 	 */
 	
-	@RequestMapping(value = "/getAllClients", method = RequestMethod.GET, produces =  MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getAllClients(){
-		logger.info("Entry /getAllClients from controller");
+	@RequestMapping(value = "/getclients", method = RequestMethod.GET, produces =  MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getClients(){
+		logger.info("Entry /getclients from controller");
 		List<ClientRequestDto> lstClientsDto = null;
 		try {
 			logger.info("Start Call -> getAllClients()");
@@ -113,10 +117,12 @@ public class DetectIdController {
 			mapper.registerModule(new JavaTimeModule());
 			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 			return new ResponseEntity<String>(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lstClientsDto), HttpStatus.OK);
+			
 		} catch (Exception e) {
 			logger.error("Exception -> getAllClients : " +  e.getMessage());
 			return new ResponseEntity<String>("!oops, ha ocurrido un error general en el sistema. " + e.getMessage(), HttpStatus.NO_CONTENT);
 		}
+		
 	}
 
 }
