@@ -1,0 +1,31 @@
+<div class="col-md-10">
+
+  <input [(ngModel)]="searchText" class="form-control"  placeholder="Filter by shared key...">
+  <h2> Clients Details</h2>
+  
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Shared Key</th>
+      <th>Bussiness ID</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Date Added</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      
+    </tr>
+  </thead>
+    <tbody>
+    <tr *ngFor="let client of clients | grdFilter: {sharedKey: searchText};">
+      <td>{{ client.sharedKey }} </td>
+      <td>{{ client.nombre }} </td>
+      <td>{{ client.email }} </td>
+      <td>{{ client.phone }} </td>
+      <td>{{ client.registeredAt }} </td>
+      <td>{{ client.startDate }} </td>
+      <td>{{ client.endDate }} </td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
